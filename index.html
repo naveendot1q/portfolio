@@ -248,6 +248,336 @@
     .bball-stats { grid-template-columns:1fr 1fr; }
     .certs-grid { grid-template-columns:1fr; }
   }
+
+  /* ═══════════════════════════════════════
+     BLOG SYSTEM
+  ═══════════════════════════════════════ */
+  .nav-blog-link {
+    color: var(--orange) !important;
+    border: 1px solid rgba(255,107,26,.35);
+    padding: 4px 14px !important;
+    border-radius: 2px;
+  }
+  .nav-blog-link:hover { background: rgba(255,107,26,.1); }
+  .nav-blog-link::after { display:none !important; }
+
+  /* BLOG SECTION */
+  #blog { background: var(--dark2); }
+
+  /* BLOG TOOLBAR */
+  .blog-toolbar {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 36px; flex-wrap: wrap;
+  }
+  .blog-search-wrap {
+    flex: 1; min-width: 200px;
+    position: relative;
+  }
+  .blog-search {
+    width: 100%;
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); padding: 11px 16px 11px 40px;
+    font-family: 'Space Mono', monospace; font-size: .78rem;
+    outline: none; transition: border-color .2s;
+    clip-path: polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+  }
+  .blog-search:focus { border-color: var(--orange); }
+  .blog-search-icon {
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: .9rem; pointer-events: none;
+  }
+  .blog-cats {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .cat-btn {
+    padding: 7px 16px; font-family: 'Space Mono', monospace;
+    font-size: .62rem; letter-spacing: 1.5px; text-transform: uppercase;
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--muted); cursor: pointer; transition: all .2s;
+    clip-path: polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));
+  }
+  .cat-btn:hover, .cat-btn.active {
+    border-color: var(--orange); color: var(--orange);
+    background: rgba(255,107,26,.08);
+  }
+  .cat-btn.active { font-weight: 700; }
+  .blog-new-btn {
+    padding: 10px 20px; background: var(--orange); color: var(--dark);
+    font-family: 'Space Mono', monospace; font-size: .68rem;
+    font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    border: none; cursor: pointer; white-space: nowrap;
+    clip-path: polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+    transition: all .2s;
+  }
+  .blog-new-btn:hover { background: var(--orange-glow); transform: translateY(-1px); }
+
+  /* BLOG GRID */
+  .blog-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 20px;
+    min-height: 200px;
+  }
+  .blog-card {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 0; position: relative; overflow: hidden;
+    transition: all .3s; cursor: pointer;
+    clip-path: polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+    display: flex; flex-direction: column;
+  }
+  .blog-card:hover { transform: translateY(-5px); border-color: rgba(255,107,26,.3); box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+  .blog-card-accent {
+    height: 3px;
+    background: linear-gradient(to right, var(--orange), var(--blue));
+  }
+  .blog-card-accent.tech { background: linear-gradient(to right, var(--blue), var(--green)); }
+  .blog-card-accent.life { background: linear-gradient(to right, var(--orange), #ff2d9b); }
+  .blog-card-accent.basketball { background: linear-gradient(to right, var(--orange), #FFD700); }
+  .blog-card-accent.networking { background: linear-gradient(to right, var(--blue), #7C3AED); }
+  .blog-card-accent.cloud { background: linear-gradient(to right, var(--green), var(--blue)); }
+  .blog-card-body { padding: 22px 22px 18px; flex: 1; display: flex; flex-direction: column; }
+  .blog-card-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .blog-cat-badge {
+    font-size: .58rem; letter-spacing: 2px; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 2px; border: 1px solid;
+  }
+  .blog-cat-badge.tech { color: var(--blue); border-color: rgba(0,212,255,.3); background: rgba(0,212,255,.06); }
+  .blog-cat-badge.life { color: #ff2d9b; border-color: rgba(255,45,155,.3); background: rgba(255,45,155,.06); }
+  .blog-cat-badge.basketball { color: var(--orange); border-color: rgba(255,107,26,.3); background: rgba(255,107,26,.06); }
+  .blog-cat-badge.networking { color: #A78BFA; border-color: rgba(167,139,250,.3); background: rgba(167,139,250,.06); }
+  .blog-cat-badge.cloud { color: var(--green); border-color: rgba(0,255,136,.3); background: rgba(0,255,136,.06); }
+  .blog-date { font-size: .6rem; letter-spacing: 1px; color: var(--muted); }
+  .blog-card-title {
+    font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800;
+    color: var(--text); margin-bottom: 10px; line-height: 1.35;
+  }
+  .blog-card-excerpt { font-size: .75rem; line-height: 1.7; color: var(--muted); flex: 1; }
+  .blog-card-footer {
+    padding: 12px 22px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--border); margin-top: 14px;
+  }
+  .blog-read-time { font-size: .6rem; letter-spacing: 1px; color: var(--muted); }
+  .blog-read-link { font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); }
+  .blog-card-actions {
+    position: absolute; top: 14px; right: 14px;
+    display: flex; gap: 6px; opacity: 0; transition: opacity .2s;
+  }
+  .blog-card:hover .blog-card-actions { opacity: 1; }
+  .card-action-btn {
+    width: 28px; height: 28px; border: 1px solid var(--border);
+    background: var(--dark2); color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: .75rem; transition: all .2s;
+    border-radius: 2px;
+  }
+  .card-action-btn:hover { border-color: var(--orange); color: var(--orange); }
+  .card-action-btn.del:hover { border-color: #ff4444; color: #ff4444; }
+  .blog-empty {
+    grid-column: 1/-1; text-align: center; padding: 60px 20px;
+    color: var(--muted);
+  }
+  .blog-empty .empty-icon { font-size: 3rem; margin-bottom: 16px; }
+  .blog-empty p { font-size: .82rem; line-height: 1.7; }
+
+  /* POST COUNT */
+  .blog-count {
+    font-size: .68rem; letter-spacing: 2px; color: var(--muted);
+    margin-bottom: 18px; text-transform: uppercase;
+  }
+  .blog-count span { color: var(--orange); }
+
+  /* ── EDITOR MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(8,10,15,.96); backdrop-filter: blur(16px);
+    display: none; align-items: flex-start; justify-content: center;
+    overflow-y: auto; padding: 40px 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .editor-modal {
+    background: var(--dark2); border: 1px solid var(--border);
+    width: 100%; max-width: 860px; border-radius: 4px;
+    position: relative; overflow: hidden;
+    clip-path: polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px));
+  }
+  .editor-header {
+    padding: 24px 32px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .editor-title-bar {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
+    letter-spacing: 3px; color: var(--orange);
+  }
+  .editor-close {
+    width: 34px; height: 34px; border: 1px solid var(--border);
+    background: none; color: var(--muted); cursor: pointer;
+    font-size: 1.1rem; transition: all .2s; border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .editor-close:hover { border-color: #ff4444; color: #ff4444; }
+  .editor-body { padding: 28px 32px; display: flex; flex-direction: column; gap: 18px; }
+  .editor-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .editor-field { display: flex; flex-direction: column; gap: 6px; }
+  .editor-label { font-size: .62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .editor-input, .editor-select {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); padding: 11px 14px;
+    font-family: 'Space Mono', monospace; font-size: .8rem;
+    outline: none; transition: border-color .2s;
+    clip-path: polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));
+  }
+  .editor-input:focus, .editor-select:focus { border-color: var(--orange); }
+  .editor-select option { background: var(--dark2); }
+
+  /* MARKDOWN EDITOR TABS */
+  .md-editor-wrap { display: flex; flex-direction: column; gap: 0; }
+  .md-tabs {
+    display: flex; gap: 0; border-bottom: 1px solid var(--border);
+  }
+  .md-tab {
+    padding: 8px 20px; font-family: 'Space Mono', monospace;
+    font-size: .65rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); cursor: pointer; border: none;
+    background: none; border-bottom: 2px solid transparent;
+    transition: all .2s; margin-bottom: -1px;
+  }
+  .md-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+  .md-toolbar {
+    display: flex; gap: 4px; padding: 8px 0; flex-wrap: wrap;
+  }
+  .md-tool {
+    padding: 5px 10px; background: var(--card); border: 1px solid var(--border);
+    color: var(--muted); font-family: 'Space Mono', monospace;
+    font-size: .68rem; cursor: pointer; transition: all .2s;
+    border-radius: 2px;
+  }
+  .md-tool:hover { color: var(--orange); border-color: rgba(255,107,26,.4); }
+  .md-textarea {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); padding: 16px; min-height: 320px;
+    font-family: 'Space Mono', monospace; font-size: .8rem;
+    line-height: 1.7; outline: none; resize: vertical;
+    transition: border-color .2s; width: 100%;
+    tab-size: 2;
+  }
+  .md-textarea:focus { border-color: var(--orange); }
+  .md-preview {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 20px; min-height: 320px; display: none;
+    overflow-y: auto;
+  }
+  .md-preview.show { display: block; }
+  .md-preview h1 { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--orange); margin-bottom:16px; letter-spacing:2px; }
+  .md-preview h2 { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:800; color:var(--text); margin:24px 0 12px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .md-preview h3 { font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:700; color:var(--blue); margin:20px 0 10px; }
+  .md-preview p { font-size:.85rem; line-height:1.8; color:var(--muted); margin-bottom:14px; }
+  .md-preview ul,.md-preview ol { padding-left:24px; margin-bottom:14px; }
+  .md-preview li { font-size:.83rem; line-height:1.7; color:var(--muted); margin-bottom:6px; }
+  .md-preview code { background:rgba(0,212,255,.1); color:var(--blue); padding:2px 7px; border-radius:3px; font-size:.78rem; font-family:'Space Mono',monospace; }
+  .md-preview pre { background:var(--dark); border:1px solid var(--border); border-left:3px solid var(--orange); padding:16px; margin-bottom:16px; overflow-x:auto; border-radius:2px; }
+  .md-preview pre code { background:none; padding:0; color:var(--green); font-size:.78rem; }
+  .md-preview blockquote { border-left:3px solid var(--orange); padding:12px 20px; background:rgba(255,107,26,.05); margin-bottom:14px; font-style:italic; color:var(--text); }
+  .md-preview a { color:var(--blue); text-decoration:underline; }
+  .md-preview strong { color:var(--text); font-weight:700; }
+  .md-preview em { color:var(--orange-glow); font-style:italic; }
+  .md-preview hr { border:none; border-top:1px solid var(--border); margin:24px 0; }
+  .md-preview table { width:100%; border-collapse:collapse; margin-bottom:16px; font-size:.78rem; }
+  .md-preview th { background:var(--dark); color:var(--orange); padding:10px 14px; text-align:left; border:1px solid var(--border); font-family:'Syne',sans-serif; font-size:.78rem; }
+  .md-preview td { padding:9px 14px; border:1px solid var(--border); color:var(--muted); }
+  .md-preview tr:nth-child(even) td { background:rgba(255,255,255,.02); }
+  .md-preview img { max-width:100%; border-radius:4px; border:1px solid var(--border); }
+
+  .editor-footer {
+    padding: 20px 32px; border-top: 1px solid var(--border);
+    display: flex; gap: 12px; justify-content: flex-end; align-items: center;
+  }
+  .editor-hint { font-size: .62rem; letter-spacing: 1px; color: var(--muted); flex: 1; }
+  .btn-cancel {
+    padding: 10px 22px; background: transparent; color: var(--muted);
+    border: 1px solid var(--border); cursor: pointer;
+    font-family: 'Space Mono', monospace; font-size: .68rem;
+    letter-spacing: 1.5px; text-transform: uppercase; transition: all .2s;
+    clip-path: polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));
+  }
+  .btn-cancel:hover { border-color: var(--muted); color: var(--text); }
+  .btn-publish {
+    padding: 10px 24px; background: var(--orange); color: var(--dark);
+    border: none; cursor: pointer; font-family: 'Space Mono', monospace;
+    font-size: .68rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; transition: all .2s;
+    clip-path: polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+  }
+  .btn-publish:hover { background: var(--orange-glow); }
+
+  /* ── POST READER MODAL ── */
+  .reader-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(8,10,15,.98); backdrop-filter: blur(20px);
+    display: none; overflow-y: auto;
+  }
+  .reader-overlay.open { display: block; }
+  .reader-inner {
+    max-width: 760px; margin: 0 auto; padding: 60px 24px 100px;
+  }
+  .reader-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: .68rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); cursor: pointer; background: none; border: none;
+    transition: color .2s; margin-bottom: 40px;
+  }
+  .reader-back:hover { color: var(--orange); }
+  .reader-header { margin-bottom: 40px; }
+  .reader-meta {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .reader-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.2rem, 6vw, 3.8rem);
+    line-height: 1; letter-spacing: 2px; color: var(--text);
+    margin-bottom: 16px;
+  }
+  .reader-subtitle { font-size: .85rem; color: var(--muted); line-height: 1.7; }
+  .reader-divider {
+    height: 2px; background: linear-gradient(to right, var(--orange), var(--blue), transparent);
+    margin: 32px 0;
+  }
+  .reader-content { }
+  .reader-content h1 { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; color:var(--orange); margin-bottom:20px; letter-spacing:2px; }
+  .reader-content h2 { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; color:var(--text); margin:36px 0 14px; border-bottom:1px solid var(--border); padding-bottom:10px; }
+  .reader-content h3 { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; color:var(--blue); margin:28px 0 12px; }
+  .reader-content h4 { font-family:'Syne',sans-serif; font-size:.95rem; font-weight:700; color:var(--green); margin:20px 0 10px; }
+  .reader-content p { font-size:.9rem; line-height:1.9; color:var(--muted); margin-bottom:18px; }
+  .reader-content ul,.reader-content ol { padding-left:28px; margin-bottom:18px; }
+  .reader-content li { font-size:.88rem; line-height:1.75; color:var(--muted); margin-bottom:8px; }
+  .reader-content code { background:rgba(0,212,255,.1); color:var(--blue); padding:2px 8px; border-radius:3px; font-size:.8rem; font-family:'Space Mono',monospace; }
+  .reader-content pre { background:var(--dark); border:1px solid var(--border); border-left:4px solid var(--orange); padding:20px; margin-bottom:20px; overflow-x:auto; border-radius:2px; }
+  .reader-content pre code { background:none; padding:0; color:var(--green); font-size:.8rem; line-height:1.7; }
+  .reader-content blockquote { border-left:4px solid var(--orange); padding:16px 24px; background:rgba(255,107,26,.05); margin-bottom:20px; border-radius:0 2px 2px 0; }
+  .reader-content blockquote p { color:var(--text); font-style:italic; margin:0; font-size:.88rem; }
+  .reader-content a { color:var(--blue); text-decoration:underline; }
+  .reader-content strong { color:var(--text); font-weight:700; }
+  .reader-content em { color:var(--orange-glow); }
+  .reader-content hr { border:none; border-top:1px solid var(--border); margin:32px 0; }
+  .reader-content table { width:100%; border-collapse:collapse; margin-bottom:20px; }
+  .reader-content th { background:var(--dark); color:var(--orange); padding:12px 16px; text-align:left; border:1px solid var(--border); font-family:'Syne',sans-serif; }
+  .reader-content td { padding:11px 16px; border:1px solid var(--border); color:var(--muted); font-size:.85rem; }
+  .reader-content tr:nth-child(even) td { background:rgba(255,255,255,.02); }
+  .reader-content img { max-width:100%; border-radius:4px; border:1px solid var(--border); margin:12px 0; }
+
+  /* BLOG RESPONSIVE */
+  @media(max-width:900px){
+    .blog-grid { grid-template-columns:1fr 1fr; }
+    .editor-row { grid-template-columns:1fr; }
+    .editor-body { padding:20px; }
+    .editor-header { padding:18px 20px; }
+    .editor-footer { padding:16px 20px; }
+  }
+  @media(max-width:560px){
+    .blog-grid { grid-template-columns:1fr; }
+    .reader-inner { padding:40px 16px 80px; }
+  }
 </style>
 </head>
 <body>
@@ -266,6 +596,7 @@
   <a href="#projects" onclick="toggleMenu()">Projects</a>
   <a href="#basketball" onclick="toggleMenu()">Court</a>
   <a href="#contact" onclick="toggleMenu()">Contact</a>
+  <a href="#blog" onclick="toggleMenu()">Blog</a>
 </div>
 
 <!-- NAV -->
@@ -279,6 +610,7 @@
     <li><a href="#projects">Projects</a></li>
     <li><a href="#basketball">Court</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><a href="#blog" class="nav-blog-link">Blog</a></li>
   </ul>
   <button class="nav-menu" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -727,10 +1059,10 @@
           <a href="https://www.linkedin.com/in/naveenmeel" target="_blank" class="c-link">
             <span class="c-icon">in</span> linkedin.com/in/naveenmeel
           </a>
-          <a href="https://github.com/naveenmeel" target="_blank" class="c-link">
+          <a href="https://github.com" target="_blank" class="c-link">
             <span class="c-icon">⌥</span> GitHub — naveenmeel
           </a>
-          <a href="https://drive.google.com/file/d/11_e4j-LAIuu_h4KL86LgbucMUnoi2p_R/view?usp=drivesdk" class="c-link">
+          <a href="#" class="c-link">
             <span class="c-icon">📄</span> Download Resume (PDF)
           </a>
         </div>
@@ -757,6 +1089,138 @@
     </div>
   </div>
 </section>
+
+<!-- ═══════════════════════════════════════
+     BLOG SECTION
+════════════════════════════════════════ -->
+<section id="blog">
+  <div class="si">
+    <div class="sec-label">Writing</div>
+    <h2 class="sec-title">BLOG &<br>ARTICLES</h2>
+
+    <!-- Toolbar -->
+    <div class="blog-toolbar">
+      <div class="blog-search-wrap">
+        <span class="blog-search-icon">🔍</span>
+        <input type="text" class="blog-search" id="blogSearch" placeholder="Search posts...">
+      </div>
+      <div class="blog-cats" id="blogCats">
+        <button class="cat-btn active" data-cat="all">All</button>
+        <button class="cat-btn" data-cat="networking">Networking</button>
+        <button class="cat-btn" data-cat="cloud">Cloud</button>
+        <button class="cat-btn" data-cat="tech">Tech</button>
+        <button class="cat-btn" data-cat="basketball">Basketball</button>
+        <button class="cat-btn" data-cat="life">Life</button>
+      </div>
+      <button class="blog-new-btn" onclick="openEditor()">+ New Post</button>
+    </div>
+
+    <div class="blog-count" id="blogCount"><span id="blogCountNum">0</span> Posts</div>
+
+    <!-- Grid -->
+    <div class="blog-grid" id="blogGrid">
+      <div class="blog-empty">
+        <div class="empty-icon">✍️</div>
+        <p>No posts yet. Hit <strong style="color:var(--orange)">+ New Post</strong> to write your first article.<br>Supports full <strong style="color:var(--blue)">Markdown</strong> with live preview.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     EDITOR MODAL
+════════════════════════════════════════ -->
+<div class="modal-overlay" id="editorOverlay">
+  <div class="editor-modal">
+    <div class="editor-header">
+      <div class="editor-title-bar" id="editorTitleBar">NEW POST</div>
+      <button class="editor-close" onclick="closeEditor()">✕</button>
+    </div>
+    <div class="editor-body">
+      <div class="editor-field">
+        <label class="editor-label">Post Title *</label>
+        <input type="text" class="editor-input" id="postTitle" placeholder="Your post title...">
+      </div>
+      <div class="editor-row">
+        <div class="editor-field">
+          <label class="editor-label">Category *</label>
+          <select class="editor-select" id="postCat">
+            <option value="networking">Networking</option>
+            <option value="cloud">Cloud</option>
+            <option value="tech">Tech</option>
+            <option value="basketball">Basketball</option>
+            <option value="life">Life</option>
+          </select>
+        </div>
+        <div class="editor-field">
+          <label class="editor-label">Excerpt (short summary)</label>
+          <input type="text" class="editor-input" id="postExcerpt" placeholder="A brief description for the card...">
+        </div>
+      </div>
+
+      <!-- Markdown editor -->
+      <div class="md-editor-wrap">
+        <div class="md-tabs">
+          <button class="md-tab active" id="tabWrite" onclick="switchTab('write')">✏ Write</button>
+          <button class="md-tab" id="tabPreview" onclick="switchTab('preview')">👁 Preview</button>
+        </div>
+        <div class="md-toolbar">
+          <button class="md-tool" onclick="mdInsert('**','**','Bold')"><strong>B</strong></button>
+          <button class="md-tool" onclick="mdInsert('*','*','Italic')"><em>I</em></button>
+          <button class="md-tool" onclick="mdInsert('~~','~~','Strike')">S̶</button>
+          <button class="md-tool" onclick="mdInsert('# ','','Heading 1')">H1</button>
+          <button class="md-tool" onclick="mdInsert('## ','','Heading 2')">H2</button>
+          <button class="md-tool" onclick="mdInsert('### ','','Heading 3')">H3</button>
+          <button class="md-tool" onclick="mdInsert('`','`','code')">{'`'}</button>
+          <button class="md-tool" onclick="mdInsertBlock('```\n','```')">{'```'}</button>
+          <button class="md-tool" onclick="mdInsert('[','](url)','link text')">🔗</button>
+          <button class="md-tool" onclick="mdInsertBlock('> ','')">❝</button>
+          <button class="md-tool" onclick="mdInsertBlock('- ','')">• List</button>
+          <button class="md-tool" onclick="mdInsertBlock('1. ','')">1. List</button>
+          <button class="md-tool" onclick="mdInsertBlock('---\n','')">― HR</button>
+          <button class="md-tool" onclick="mdInsertTable()">⊞ Table</button>
+        </div>
+        <textarea class="md-textarea" id="postContent" placeholder="Write your post in Markdown...
+
+# My Post Title
+
+## Introduction
+Start writing here. Full **Markdown** is supported.
+
+## Code Example
+\`\`\`javascript
+const hello = 'world';
+console.log(hello);
+\`\`\`
+
+## Conclusion
+Wrap it up!"></textarea>
+        <div class="md-preview" id="mdPreview"></div>
+      </div>
+    </div>
+    <div class="editor-footer">
+      <span class="editor-hint">Supports full Markdown · Auto-saved to browser storage</span>
+      <button class="btn-cancel" onclick="closeEditor()">Cancel</button>
+      <button class="btn-publish" onclick="publishPost()">Publish Post</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     POST READER MODAL
+════════════════════════════════════════ -->
+<div class="reader-overlay" id="readerOverlay">
+  <div class="reader-inner">
+    <button class="reader-back" onclick="closeReader()">← Back to Blog</button>
+    <div class="reader-header">
+      <div class="reader-meta" id="readerMeta"></div>
+      <h1 class="reader-title" id="readerTitle"></h1>
+      <p class="reader-subtitle" id="readerSubtitle"></p>
+    </div>
+    <div class="reader-divider"></div>
+    <div class="reader-content" id="readerContent"></div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -840,6 +1304,584 @@ function handleSend(){
   b.textContent='Message Sent! ✓'; b.style.background='var(--green)';
   setTimeout(()=>{ b.textContent='Send Message'; b.style.background=''; },3000);
 }
+
+/* ═══════════════════════════════════════════════════════
+   BLOG ENGINE
+═══════════════════════════════════════════════════════ */
+
+// ── STORAGE KEY & STATE ──
+const STORAGE_KEY = 'naveen_blog_posts_v1';
+let posts = [];
+let editingId = null;
+let currentFilter = 'all';
+let searchQuery = '';
+
+// ── SEED POSTS (first load) ──
+const seedPosts = [
+  {
+    id: 'seed1',
+    title: 'How MPLS Works: A Practical Guide',
+    category: 'networking',
+    excerpt: 'Breaking down MPLS label switching — how packets move through a backbone without looking up routing tables at every hop.',
+    content: `# How MPLS Works: A Practical Guide
+
+## What is MPLS?
+
+**Multi-Protocol Label Switching (MPLS)** is one of the most elegant solutions in networking. Instead of making routing decisions at every hop based on IP destination, MPLS assigns a **label** to packets at the ingress router and forwards them purely based on that label.
+
+> "MPLS is the backbone of modern enterprise WAN and telco networks — including what we use at Airtel daily."
+
+## How Label Switching Works
+
+When a packet enters an MPLS network:
+
+1. The **ingress Label Edge Router (LER)** examines the IP header
+2. It assigns a **label** based on FEC (Forwarding Equivalence Class)
+3. Subsequent **Label Switching Routers (LSR)** swap labels and forward — no IP lookup needed
+4. The **egress LER** pops the label and delivers the original IP packet
+
+## Label Stack
+
+\`\`\`
+┌────────────────────────────────────┐
+│  Label (20 bits)                   │
+│  Traffic Class / EXP (3 bits)      │
+│  Bottom of Stack bit (1 bit)       │
+│  TTL (8 bits)                      │
+└────────────────────────────────────┘
+\`\`\`
+
+## Why MPLS Matters for Banking Clients
+
+At Airtel, we design MPLS networks for banking customers who need:
+
+- **Low latency** — sub-10ms RTT across sites
+- **Traffic engineering** — predictable paths regardless of IGP
+- **QoS guarantees** — voice, data, and video in separate queues
+- **Fast reroute** — sub-50ms failover via RSVP-TE
+
+## Key Protocols
+
+| Protocol | Purpose |
+|---|---|
+| LDP | Label distribution |
+| RSVP-TE | Traffic engineering LSPs |
+| BGP-LU | Inter-AS label exchange |
+| Segment Routing | Modern MPLS without LDP |
+
+## Conclusion
+
+MPLS remains foundational to enterprise connectivity. Understanding it at depth — not just passing CCNA — is what separates a good network engineer from a great one.`,
+    date: new Date(Date.now() - 7*24*60*60*1000).toISOString(),
+  },
+  {
+    id: 'seed2',
+    title: 'Building a CI/CD Pipeline with Jenkins + Docker + Kubernetes',
+    category: 'cloud',
+    excerpt: 'Step-by-step walkthrough of a production CI/CD pipeline from code commit to container running in Kubernetes.',
+    content: `# Building a CI/CD Pipeline with Jenkins + Docker + Kubernetes
+
+## The Goal
+
+Automate the journey from a \`git push\` to a running container in Kubernetes — with security gates in between.
+
+## Architecture Overview
+
+\`\`\`
+Developer → GitHub → Jenkins → SonarQube → Docker Build → TRIVY Scan → Nexus → K8s Deploy
+\`\`\`
+
+## Step 1: Jenkins Pipeline (Jenkinsfile)
+
+\`\`\`groovy
+pipeline {
+  agent any
+  stages {
+    stage('Checkout') {
+      steps { git 'https://github.com/yourrepo/app.git' }
+    }
+    stage('Build') {
+      steps { sh 'mvn clean package' }
+    }
+    stage('SonarQube Analysis') {
+      steps {
+        withSonarQubeEnv('SonarQube') {
+          sh 'mvn sonar:sonar'
+        }
+      }
+    }
+    stage('Docker Build') {
+      steps { sh 'docker build -t myapp:${BUILD_NUMBER} .' }
+    }
+    stage('TRIVY Scan') {
+      steps { sh 'trivy image myapp:${BUILD_NUMBER}' }
+    }
+    stage('Push to Nexus') {
+      steps { sh 'docker push nexus.local/myapp:${BUILD_NUMBER}' }
+    }
+    stage('Deploy to K8s') {
+      steps { sh 'kubectl apply -f k8s/deployment.yaml' }
+    }
+  }
+}
+\`\`\`
+
+## Step 2: Dockerfile
+
+\`\`\`dockerfile
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+\`\`\`
+
+## Step 3: Kubernetes Deployment
+
+\`\`\`yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    spec:
+      containers:
+      - name: myapp
+        image: nexus.local/myapp:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+\`\`\`
+
+## Result
+
+- Zero-touch deployments triggered by every push to \`main\`
+- Security scanned at every stage
+- Rollback in seconds via \`kubectl rollout undo\`
+
+This is the foundation of modern DevOps. Once you have this running, you can layer on Prometheus + Grafana for full observability.`,
+    date: new Date(Date.now() - 3*24*60*60*1000).toISOString(),
+  },
+  {
+    id: 'seed3',
+    title: 'Why Basketball Makes Me a Better Engineer',
+    category: 'basketball',
+    excerpt: 'The mental models I\'ve built on the court — reading the game, adapting in real-time, and trusting your teammates — apply directly to engineering.',
+    content: `# Why Basketball Makes Me a Better Engineer
+
+## The Connection Nobody Talks About
+
+Most people think of hobbies as escapes from work. I think differently. Basketball has made me a fundamentally better network engineer, and here's why.
+
+## 1. Reading the Game = Reading the Network
+
+A point guard reads the defense *before* the ball leaves their hands. You anticipate where the pressure is coming from, identify the open lane, and make a decision in under a second.
+
+This is **exactly** what happens during a network incident. Before you start making changes, you read the topology:
+
+- Where is the congestion?
+- Which link is the single point of failure?
+- What's the blast radius if I make this change?
+
+> The best players and the best engineers both have one thing in common: they see the whole board, not just the immediate play.
+
+## 2. Tempo Control = Change Management
+
+In basketball, the point guard controls tempo. Sometimes you push pace, sometimes you slow it down to draw up a play.
+
+In engineering, **change management is tempo control**. You don't always go fast. A 3am maintenance window for a critical MPLS reconfiguration at a banking client demands the same calm, deliberate execution as a late-game possession.
+
+## 3. Film Study = Post-Mortems
+
+Every serious basketball player watches film. You review mistakes, understand what the defense is doing, and build new patterns.
+
+Post-mortems in engineering serve the exact same function. After every outage, you sit down, watch the "film" (logs, metrics, traces), and build better patterns.
+
+## 4. Trust Your Teammates
+
+You can't win 5v5 basketball alone. Great teams communicate constantly, cover for each other, and make each other better.
+
+The best engineering teams work exactly the same way. The lone hero who "saves" incidents by working in isolation is a liability, not an asset.
+
+## Conclusion
+
+Next time someone asks why you play basketball (or any sport), tell them it's part of the job. The cognitive skills transfer perfectly.
+
+*Now if you'll excuse me, I have a pickup game in an hour. 🏀*`,
+    date: new Date().toISOString(),
+  }
+];
+
+// ── INIT ──
+function blogInit() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored) {
+    try { posts = JSON.parse(stored); } catch { posts = []; }
+  }
+  if (posts.length === 0) {
+    posts = seedPosts;
+    savePosts();
+  }
+  renderBlog();
+  setupBlogEvents();
+}
+
+function savePosts() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+}
+
+// ── RENDER ──
+function renderBlog() {
+  const grid = document.getElementById('blogGrid');
+  const countEl = document.getElementById('blogCountNum');
+
+  let filtered = posts.filter(p => {
+    const matchCat = currentFilter === 'all' || p.category === currentFilter;
+    const q = searchQuery.toLowerCase();
+    const matchSearch = !q || p.title.toLowerCase().includes(q) || (p.excerpt||'').toLowerCase().includes(q) || p.content.toLowerCase().includes(q);
+    return matchCat && matchSearch;
+  });
+
+  // Sort newest first
+  filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  countEl.textContent = filtered.length;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="blog-empty"><div class="empty-icon">${searchQuery ? '🔍' : '✍️'}</div><p>${searchQuery ? `No posts matching "<strong style="color:var(--orange)">${searchQuery}</strong>"` : 'No posts in this category yet.'}</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => blogCardHTML(p)).join('');
+
+  // Attach card click (open reader)
+  grid.querySelectorAll('.blog-card').forEach(card => {
+    const id = card.dataset.id;
+    card.addEventListener('click', e => {
+      if (e.target.closest('.card-action-btn')) return;
+      openReader(id);
+    });
+  });
+  grid.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); openEditor(btn.dataset.id); });
+  });
+  grid.querySelectorAll('.del-btn').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); deletePost(btn.dataset.id); });
+  });
+}
+
+function blogCardHTML(p) {
+  const cat = p.category || 'tech';
+  const dateStr = new Date(p.date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+  const readTime = Math.max(1, Math.ceil(p.content.split(/\s+/).length / 200));
+  const excerpt = p.excerpt || p.content.replace(/[#*`>\[\]_~]/g,'').substring(0,120) + '...';
+  return `
+  <div class="blog-card" data-id="${p.id}">
+    <div class="blog-card-accent ${cat}"></div>
+    <div class="blog-card-body">
+      <div class="blog-card-meta">
+        <span class="blog-cat-badge ${cat}">${cat}</span>
+        <span class="blog-date">${dateStr}</span>
+      </div>
+      <div class="blog-card-title">${escHTML(p.title)}</div>
+      <div class="blog-card-excerpt">${escHTML(excerpt)}</div>
+    </div>
+    <div class="blog-card-footer">
+      <span class="blog-read-time">⏱ ${readTime} min read</span>
+      <span class="blog-read-link">Read →</span>
+    </div>
+    <div class="blog-card-actions">
+      <button class="card-action-btn edit-btn" data-id="${p.id}" title="Edit">✎</button>
+      <button class="card-action-btn del-btn" data-id="${p.id}" title="Delete">🗑</button>
+    </div>
+  </div>`;
+}
+
+// ── FILTER & SEARCH ──
+function setupBlogEvents() {
+  // Category buttons
+  document.getElementById('blogCats').addEventListener('click', e => {
+    const btn = e.target.closest('.cat-btn');
+    if (!btn) return;
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.cat;
+    renderBlog();
+  });
+
+  // Search
+  let searchTimer;
+  document.getElementById('blogSearch').addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      searchQuery = e.target.value.trim();
+      renderBlog();
+    }, 250);
+  });
+}
+
+// ── EDITOR ──
+let editorTab = 'write';
+
+function openEditor(id = null) {
+  editingId = id;
+  const overlay = document.getElementById('editorOverlay');
+  const titleBar = document.getElementById('editorTitleBar');
+
+  if (id) {
+    const p = posts.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('postTitle').value = p.title;
+    document.getElementById('postCat').value = p.category;
+    document.getElementById('postExcerpt').value = p.excerpt || '';
+    document.getElementById('postContent').value = p.content;
+    titleBar.textContent = 'EDIT POST';
+  } else {
+    document.getElementById('postTitle').value = '';
+    document.getElementById('postCat').value = 'networking';
+    document.getElementById('postExcerpt').value = '';
+    document.getElementById('postContent').value = '';
+    titleBar.textContent = 'NEW POST';
+  }
+  switchTab('write');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('postTitle').focus(), 100);
+}
+
+function closeEditor() {
+  document.getElementById('editorOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  editingId = null;
+}
+
+function switchTab(tab) {
+  editorTab = tab;
+  const ta = document.getElementById('postContent');
+  const preview = document.getElementById('mdPreview');
+  document.getElementById('tabWrite').classList.toggle('active', tab === 'write');
+  document.getElementById('tabPreview').classList.toggle('active', tab === 'preview');
+  if (tab === 'preview') {
+    preview.innerHTML = parseMarkdown(ta.value || '*Nothing to preview yet.*');
+    preview.classList.add('show');
+    ta.style.display = 'none';
+  } else {
+    preview.classList.remove('show');
+    ta.style.display = '';
+    ta.focus();
+  }
+}
+
+function publishPost() {
+  const title = document.getElementById('postTitle').value.trim();
+  const cat = document.getElementById('postCat').value;
+  const excerpt = document.getElementById('postExcerpt').value.trim();
+  const content = document.getElementById('postContent').value.trim();
+
+  if (!title) { document.getElementById('postTitle').focus(); document.getElementById('postTitle').style.borderColor='#ff4444'; return; }
+  if (!content) { switchTab('write'); document.getElementById('postContent').focus(); return; }
+
+  document.getElementById('postTitle').style.borderColor = '';
+
+  if (editingId) {
+    const idx = posts.findIndex(p => p.id === editingId);
+    if (idx > -1) {
+      posts[idx] = { ...posts[idx], title, category: cat, excerpt, content, updated: new Date().toISOString() };
+    }
+  } else {
+    posts.unshift({
+      id: 'post_' + Date.now(),
+      title, category: cat, excerpt, content,
+      date: new Date().toISOString()
+    });
+  }
+
+  savePosts();
+  renderBlog();
+  closeEditor();
+
+  // Show toast
+  showToast(editingId ? 'Post updated!' : 'Post published! 🎉');
+}
+
+function deletePost(id) {
+  if (!confirm('Delete this post? This cannot be undone.')) return;
+  posts = posts.filter(p => p.id !== id);
+  savePosts();
+  renderBlog();
+  showToast('Post deleted.');
+}
+
+// ── READER ──
+function openReader(id) {
+  const p = posts.find(x => x.id === id);
+  if (!p) return;
+  const overlay = document.getElementById('readerOverlay');
+  const cat = p.category || 'tech';
+  const dateStr = new Date(p.date).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+  const readTime = Math.max(1, Math.ceil(p.content.split(/\s+/).length / 200));
+
+  document.getElementById('readerMeta').innerHTML = `
+    <span class="blog-cat-badge ${cat}">${cat}</span>
+    <span class="blog-date">${dateStr}</span>
+    <span class="blog-read-time">⏱ ${readTime} min read</span>`;
+  document.getElementById('readerTitle').textContent = p.title;
+  document.getElementById('readerSubtitle').textContent = p.excerpt || '';
+  document.getElementById('readerContent').innerHTML = parseMarkdown(p.content);
+
+  overlay.classList.add('open');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeReader() {
+  document.getElementById('readerOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── MARKDOWN PARSER ──
+function parseMarkdown(md) {
+  if (!md) return '';
+  let html = md;
+
+  // Escape HTML first (except we'll put it back for code)
+  const codeBlocks = [];
+  html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
+    const idx = codeBlocks.length;
+    codeBlocks.push(`<pre><code class="lang-${lang}">${escHTML(code.trim())}</code></pre>`);
+    return `%%CODE_BLOCK_${idx}%%`;
+  });
+
+  const inlineCodes = [];
+  html = html.replace(/`([^`]+)`/g, (_, code) => {
+    const idx = inlineCodes.length;
+    inlineCodes.push(`<code>${escHTML(code)}</code>`);
+    return `%%INLINE_CODE_${idx}%%`;
+  });
+
+  // Tables
+  html = html.replace(/^\|(.+)\|\n\|[-| :]+\|\n((?:\|.+\|\n?)+)/gm, (_, header, rows) => {
+    const ths = header.split('|').map(h=>h.trim()).filter(Boolean).map(h=>`<th>${h}</th>`).join('');
+    const trs = rows.trim().split('\n').map(row => {
+      const tds = row.split('|').map(c=>c.trim()).filter(Boolean).map(c=>`<td>${c}</td>`).join('');
+      return `<tr>${tds}</tr>`;
+    }).join('');
+    return `<table><thead><tr>${ths}</tr></thead><tbody>${trs}</tbody></table>`;
+  });
+
+  // Headings
+  html = html.replace(/^#{6}\s(.+)$/gm, '<h6>$1</h6>');
+  html = html.replace(/^#{5}\s(.+)$/gm, '<h5>$1</h5>');
+  html = html.replace(/^#{4}\s(.+)$/gm, '<h4>$1</h4>');
+  html = html.replace(/^#{3}\s(.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^#{2}\s(.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^#{1}\s(.+)$/gm, '<h1>$1</h1>');
+
+  // Blockquote
+  html = html.replace(/^>\s(.+)$/gm, '<blockquote><p>$1</p></blockquote>');
+
+  // HR
+  html = html.replace(/^(---|\*\*\*|___)\s*$/gm, '<hr>');
+
+  // Unordered lists
+  html = html.replace(/^[\*\-\+]\s+(.+)$/gm, '<li>$1</li>');
+  html = html.replace(/(<li>.*<\/li>\n?)+/g, m => `<ul>${m}</ul>`);
+
+  // Ordered lists
+  html = html.replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>');
+
+  // Bold, italic, strikethrough
+  html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
+  html = html.replace(/_(.+?)_/g, '<em>$1</em>');
+  html = html.replace(/~~(.+?)~~/g, '<del>$1</del>');
+
+  // Links & images
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+
+  // Paragraphs — wrap lines not already in a block tag
+  html = html.replace(/^(?!<[houlibtpad]|%%)([\s\S]*?)(?=\n\n|\n<|\n%%|$)/gm, (m) => {
+    const trimmed = m.trim();
+    if (!trimmed || trimmed.startsWith('<')) return m;
+    return `<p>${trimmed}</p>`;
+  });
+
+  // Double newlines → spacing (handled by CSS)
+  html = html.replace(/\n{2,}/g, '\n');
+  html = html.replace(/\n/g, ' ');
+
+  // Restore code
+  codeBlocks.forEach((c,i) => { html = html.replace(`%%CODE_BLOCK_${i}%%`, c); });
+  inlineCodes.forEach((c,i) => { html = html.replace(`%%INLINE_CODE_${i}%%`, c); });
+
+  return html;
+}
+
+// ── MARKDOWN TOOLBAR HELPERS ──
+function mdInsert(before, after, placeholder) {
+  const ta = document.getElementById('postContent');
+  const s = ta.selectionStart, e = ta.selectionEnd;
+  const selected = ta.value.substring(s, e) || placeholder;
+  const replacement = before + selected + after;
+  ta.value = ta.value.substring(0, s) + replacement + ta.value.substring(e);
+  ta.focus();
+  ta.selectionStart = s + before.length;
+  ta.selectionEnd = s + before.length + selected.length;
+}
+function mdInsertBlock(prefix, suffix) {
+  const ta = document.getElementById('postContent');
+  const s = ta.selectionStart;
+  const lineStart = ta.value.lastIndexOf('\n', s - 1) + 1;
+  ta.value = ta.value.substring(0, lineStart) + prefix + ta.value.substring(lineStart) + suffix;
+  ta.focus();
+}
+function mdInsertTable() {
+  const table = `\n| Header 1 | Header 2 | Header 3 |\n|---|---|---|\n| Cell 1 | Cell 2 | Cell 3 |\n| Cell 4 | Cell 5 | Cell 6 |\n`;
+  const ta = document.getElementById('postContent');
+  const s = ta.selectionStart;
+  ta.value = ta.value.substring(0, s) + table + ta.value.substring(s);
+  ta.focus();
+}
+
+// ── UTILS ──
+function escHTML(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:28px;right:28px;background:var(--card);border:1px solid var(--orange);color:var(--text);padding:12px 24px;font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing:1px;z-index:9999;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));box-shadow:0 8px 32px rgba(0,0,0,.4);transition:opacity .3s;`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; setTimeout(()=>t.remove(),300); }, 2500);
+}
+
+// Close modals on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('readerOverlay').classList.contains('open')) { closeReader(); return; }
+    if (document.getElementById('editorOverlay').classList.contains('open')) { closeEditor(); }
+  }
+});
+
+// Live preview on typing (when preview tab is active)
+document.getElementById('postContent').addEventListener('input', () => {
+  if (editorTab === 'preview') switchTab('preview');
+});
+
+// ── START BLOG ──
+blogInit();
 </script>
 </body>
 </html>
