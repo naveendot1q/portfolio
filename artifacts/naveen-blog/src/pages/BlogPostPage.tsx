@@ -26,22 +26,23 @@ export default function BlogPostPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0d1117' }}>
-        <div className="flex items-center gap-3" style={{ color: '#8b949e' }}>
-          <div className="w-5 h-5 border-2 rounded-full animate-spin" style={{ borderColor: '#FF6B1A', borderTopColor: 'transparent' }} />
-          <span className="font-mono text-sm">Loading post...</span>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--muted)' }}>
+          <div style={{ width: 18, height: 18, border: '2px solid var(--accent)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
+          <span style={{ fontSize: '0.875rem', fontFamily: 'monospace' }}>Loading…</span>
         </div>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
 
   if (notFound || !post) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0d1117' }}>
-        <div className="text-center">
-          <div className="text-6xl mb-6">404</div>
-          <h1 className="font-display font-bold text-2xl mb-2" style={{ color: '#e6edf3' }}>Post not found</h1>
-          <p className="mb-6" style={{ color: '#8b949e' }}>This post doesn't exist or was removed.</p>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', color: 'var(--fg)' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '4rem', fontWeight: 900, color: 'var(--accent)', marginBottom: 16 }}>404</div>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 8 }}>Post not found</h1>
+          <p style={{ color: 'var(--muted)', marginBottom: 24 }}>This post doesn't exist or was removed.</p>
           <a href="/blog" className="btn btn-primary">← Back to Blog</a>
         </div>
       </div>

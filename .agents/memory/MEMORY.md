@@ -1,0 +1,2 @@
+- [Theme system](theme-system.md) — data-theme on html element, CSS vars, dark default, persisted to localStorage
+- [Blog stack](blog-stack.md) — React+Vite frontend, Express API, Drizzle+Postgres, wouter routing, key quirks

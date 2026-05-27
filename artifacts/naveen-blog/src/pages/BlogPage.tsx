@@ -1,12 +1,24 @@
 import { useState, useEffect, useCallback } from 'react';
 import Navbar from '@/components/layout/Navbar';
-import HeatmapChart from '@/components/blog/HeatmapChart';
 import PostCard from '@/components/blog/PostCard';
 import BlogSidebar from '@/components/blog/BlogSidebar';
 import EditorModal from '@/components/blog/EditorModal';
-import PwaInstallBanner from '@/components/ui/PwaInstallBanner';
 import { CATEGORIES } from '@/lib/categories';
 import type { Post } from '@/lib/types';
+
+function Spinner() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {[0,1,2].map(i => (
+        <div key={i} className="card" style={{ padding: 22, opacity: 1 - i * 0.2 }}>
+          <div style={{ height: 12, borderRadius: 6, background: 'var(--bg3)', width: '60%', marginBottom: 12 }} />
+          <div style={{ height: 10, borderRadius: 6, background: 'var(--bg3)', width: '90%', marginBottom: 8 }} />
+          <div style={{ height: 10, borderRadius: 6, background: 'var(--bg3)', width: '75%' }} />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -19,135 +31,132 @@ export default function BlogPage() {
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [toast, setToast] = useState<string | null>(null);
 
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 3000);
+  };
+
   const loadPosts = useCallback(async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (filter !== 'all') params.set('category', filter);
-      if (search) params.set('search', search);
-      const res = await fetch(`/api/posts?${params}`);
+      const p = new URLSearchParams();
+      if (filter !== 'all') p.set('category', filter);
+      if (search) p.set('search', search);
+      const res = await fetch(`/api/posts?${p}`);
       const json = await res.json();
       setPosts(json.posts || []);
-    } catch {
-      showToast('Failed to load posts');
-    } finally {
-      setLoading(false);
-    }
+    } catch { showToast('Failed to load posts'); }
+    finally { setLoading(false); }
   }, [filter, search]);
 
   useEffect(() => {
-    fetch('/api/auth/me').then(r => r.json()).then(d => setIsAdmin(d.authenticated));
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then(r => r.json())
+      .then(d => setIsAdmin(d.authenticated));
   }, []);
 
   useEffect(() => { loadPosts(); }, [loadPosts]);
 
   useEffect(() => {
-    const t = setTimeout(() => setSearch(searchInput), 400);
+    const t = setTimeout(() => setSearch(searchInput), 350);
     return () => clearTimeout(t);
   }, [searchInput]);
 
-  function showToast(msg: string) {
-    setToast(msg);
-    setTimeout(() => setToast(null), 2800);
-  }
-
-  function handleNewPost() { setEditingPost(null); setEditorOpen(true); }
-  function handleEdit(post: Post) { setEditingPost(post); setEditorOpen(true); }
+  function openNewPost() { setEditingPost(null); setEditorOpen(true); }
+  function openEdit(post: Post) { setEditingPost(post); setEditorOpen(true); }
 
   async function handleDelete(slug: string) {
-    if (!confirm('Delete this post? This cannot be undone.')) return;
-    const res = await fetch(`/api/posts/${slug}`, { method: 'DELETE' });
+    const res = await fetch(`/api/posts/${slug}`, { method: 'DELETE', credentials: 'include' });
     if (res.ok) { showToast('Post deleted'); loadPosts(); }
     else showToast('Delete failed');
   }
 
-  async function handlePublish(post: Post) {
+  async function handleTogglePublish(post: Post) {
     const res = await fetch(`/api/posts/${post.slug}`, {
-      method: 'PATCH',
+      method: 'PATCH', credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...post, published: !post.published }),
+      body: JSON.stringify({ published: !post.published }),
     });
     if (res.ok) { showToast(post.published ? 'Post unpublished' : 'Post published'); loadPosts(); }
+    else showToast('Failed to update');
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#0d1117' }}>
-      <Navbar isAdmin={isAdmin} onNewPost={handleNewPost} onAuthChange={setIsAdmin} />
+    <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+      <Navbar isAdmin={isAdmin} onNewPost={openNewPost} onAuthChange={setIsAdmin} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-        <div className="mb-10">
-          <p className="font-mono text-xs tracking-widest mb-3" style={{ color: '#FF6B1A' }}>WRITING</p>
-          <h1 className="font-display font-bold mb-3" style={{ fontSize: 'clamp(2rem,5vw,3rem)', color: '#e6edf3', letterSpacing: '-0.02em' }}>
-            Blog & Articles
-          </h1>
-          <p className="text-base max-w-xl" style={{ color: '#8b949e', lineHeight: 1.7 }}>
-            Notes on Networking, Cloud, DevOps, DevSecOps, Kubernetes, Terraform, and life off the court.
+      <main style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px 80px' }}>
+        {/* Header */}
+        <div style={{ marginBottom: 40 }}>
+          <p style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 10 }}>Writing</p>
+          <h1 style={{ fontWeight: 800, fontSize: 'clamp(1.8rem,4vw,2.8rem)', color: 'var(--fg)', letterSpacing: '-0.03em', marginBottom: 10 }}>Blog & Articles</h1>
+          <p style={{ fontSize: '0.95rem', color: 'var(--muted)', maxWidth: 480, lineHeight: 1.7 }}>
+            Notes on Networking, Cloud, DevOps, Kubernetes, Terraform — and life off the court.
           </p>
         </div>
 
-        <HeatmapChart posts={posts} allPosts={posts} />
+        {/* Search + Write */}
+        <div style={{ display: 'flex', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
+          <div style={{ position: 'relative', flex: 1, minWidth: 200 }}>
+            <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', fontSize: '0.875rem', color: 'var(--muted)', pointerEvents: 'none' }}>🔍</span>
+            <input
+              type="text"
+              placeholder="Search posts…"
+              value={searchInput}
+              onChange={e => setSearchInput(e.target.value)}
+              className="form-input"
+              style={{ paddingLeft: 36 }}
+            />
+          </div>
+          {isAdmin && (
+            <button onClick={openNewPost} className="btn btn-primary">✍️ New Post</button>
+          )}
+        </div>
 
-        <div className="flex gap-8 mt-8" style={{ alignItems: 'flex-start' }}>
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap gap-3 mb-5 items-center">
-              <div className="relative flex-1 min-w-48">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm" style={{ color: '#8b949e' }}>🔍</span>
-                <input type="text" placeholder="Search posts..." value={searchInput} onChange={e => setSearchInput(e.target.value)} className="form-input pl-9" />
-              </div>
-              {isAdmin && (
-                <button onClick={handleNewPost} className="btn btn-primary gap-2 whitespace-nowrap">✍️ Write Post</button>
-              )}
-            </div>
+        {/* Category pills */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 28 }}>
+          <button onClick={() => setFilter('all')} style={{ padding: '5px 14px', borderRadius: 20, fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', border: `1px solid ${filter === 'all' ? 'var(--accent-border)' : 'transparent'}`, background: filter === 'all' ? 'var(--accent-dim)' : 'var(--bg3)', color: filter === 'all' ? 'var(--accent)' : 'var(--muted)', transition: 'all 0.12s' }}>
+            All
+          </button>
+          {CATEGORIES.map(cat => (
+            <button key={cat.id} onClick={() => setFilter(cat.id)} style={{ padding: '5px 14px', borderRadius: 20, fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', border: `1px solid ${filter === cat.id ? `${cat.color}50` : 'transparent'}`, background: filter === cat.id ? `${cat.color}15` : 'var(--bg3)', color: filter === cat.id ? cat.color : 'var(--muted)', transition: 'all 0.12s' }}>
+              {cat.emoji} {cat.label}
+            </button>
+          ))}
+        </div>
 
-            <div className="flex flex-wrap gap-2 mb-6">
-              <button onClick={() => setFilter('all')} className="cursor-pointer transition-all"
-                style={{ background: filter === 'all' ? 'rgba(255,107,26,.15)' : 'rgba(255,255,255,.05)', color: filter === 'all' ? '#FF6B1A' : '#8b949e', border: `1px solid ${filter === 'all' ? 'rgba(255,107,26,.4)' : 'transparent'}`, padding: '5px 12px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 600 }}>
-                All
-              </button>
-              {CATEGORIES.map(cat => (
-                <button key={cat.id} onClick={() => setFilter(cat.id)} className="cursor-pointer transition-all"
-                  style={{ padding: '5px 12px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 600, background: filter === cat.id ? `${cat.color}18` : 'rgba(255,255,255,.05)', color: filter === cat.id ? cat.color : '#8b949e', border: `1px solid ${filter === cat.id ? `${cat.color}55` : 'transparent'}`, opacity: filter === cat.id ? 1 : 0.65, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                  {cat.emoji} {cat.label}
-                </button>
-              ))}
-            </div>
-
-            <p className="text-xs mb-4 font-mono tracking-wider" style={{ color: '#8b949e' }}>
-              <span style={{ color: '#FF6B1A' }}>{posts.length}</span> {posts.length === 1 ? 'post' : 'posts'}
+        <div style={{ display: 'flex', gap: 28, alignItems: 'flex-start' }}>
+          {/* Post list */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ fontSize: '0.72rem', color: 'var(--muted)', marginBottom: 14, fontFamily: 'monospace' }}>
+              <span style={{ color: 'var(--accent)', fontWeight: 700 }}>{posts.length}</span> {posts.length === 1 ? 'post' : 'posts'}
               {filter !== 'all' ? ` in "${filter}"` : ''}
               {search ? ` matching "${search}"` : ''}
             </p>
 
-            {loading ? (
-              <div className="flex flex-col gap-3">
-                {[1,2,3].map(i => (
-                  <div key={i} className="card p-6 animate-pulse" style={{ height: 160 }}>
-                    <div className="h-4 rounded mb-3" style={{ background: '#21262d', width: '60%' }} />
-                    <div className="h-3 rounded mb-2" style={{ background: '#21262d', width: '90%' }} />
-                    <div className="h-3 rounded" style={{ background: '#21262d', width: '75%' }} />
-                  </div>
-                ))}
-              </div>
-            ) : posts.length === 0 ? (
-              <div className="card p-16 text-center">
-                <div className="text-5xl mb-4">{search ? '🔍' : '✍️'}</div>
-                <p className="font-display font-bold text-lg mb-2" style={{ color: '#e6edf3' }}>
+            {loading ? <Spinner /> : posts.length === 0 ? (
+              <div className="card" style={{ padding: '56px 24px', textAlign: 'center' }}>
+                <div style={{ fontSize: '2.5rem', marginBottom: 12 }}>{search ? '🔍' : '✍️'}</div>
+                <p style={{ fontWeight: 700, color: 'var(--fg)', marginBottom: 6 }}>
                   {search ? 'No posts found' : 'No posts yet'}
                 </p>
-                <p style={{ color: '#8b949e', fontSize: '0.9rem' }}>
-                  {search ? `Nothing matching "${search}"` : isAdmin ? 'Hit "Write Post" to publish your first article.' : 'Check back soon!'}
+                <p style={{ fontSize: '0.875rem', color: 'var(--muted)' }}>
+                  {search ? `Nothing matching "${search}"` : isAdmin ? 'Click "New Post" to publish your first article.' : 'Check back soon!'}
                 </p>
               </div>
             ) : (
-              <div className="flex flex-col gap-3">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {posts.map(post => (
-                  <PostCard key={post.id} post={post} isAdmin={isAdmin} onEdit={handleEdit} onDelete={handleDelete} onTogglePublish={handlePublish} />
+                  <PostCard key={post.id} post={post} isAdmin={isAdmin} onEdit={openEdit} onDelete={handleDelete} onTogglePublish={handleTogglePublish} />
                 ))}
               </div>
             )}
           </div>
 
-          <BlogSidebar posts={posts} filter={filter} onFilterChange={setFilter} isAdmin={isAdmin} />
+          {/* Sidebar — hide on small screens */}
+          <div style={{ display: 'none' }} className="sidebar-wrapper">
+            <BlogSidebar posts={posts} filter={filter} onFilterChange={setFilter} isAdmin={isAdmin} />
+          </div>
         </div>
       </main>
 
@@ -155,12 +164,21 @@ export default function BlogPage() {
         <EditorModal
           post={editingPost}
           onClose={() => setEditorOpen(false)}
-          onSaved={() => { setEditorOpen(false); loadPosts(); showToast(editingPost ? 'Post updated! ✓' : 'Post published! 🎉'); }}
+          onSaved={() => {
+            setEditorOpen(false);
+            loadPosts();
+            showToast(editingPost ? 'Post updated ✓' : 'Post published 🎉');
+          }}
         />
       )}
 
       {toast && <div className="toast">{toast}</div>}
-      <PwaInstallBanner />
+
+      <style>{`
+        @media (min-width: 900px) {
+          .sidebar-wrapper { display: block !important; }
+        }
+      `}</style>
     </div>
   );
 }
