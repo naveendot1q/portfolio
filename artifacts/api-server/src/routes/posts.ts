@@ -40,7 +40,13 @@ router.get("/posts", async (req, res) => {
     const { category, search, limit } = req.query as Record<string, string>;
     const lim = parseInt(limit || "50");
 
-    let query = db
+    // Admins see all posts (including drafts); public sees only published
+    const token =
+      req.cookies?.admin_token ||
+      (req.headers["x-admin-token"] as string);
+    const isAdmin = !!(await verifyAdminToken(token));
+
+    const posts = await db
       .select({
         id: postsTable.id,
         title: postsTable.title,
@@ -59,7 +65,7 @@ router.get("/posts", async (req, res) => {
       .from(postsTable)
       .where(
         and(
-          eq(postsTable.published, true),
+          isAdmin ? undefined : eq(postsTable.published, true),
           category && category !== "all"
             ? eq(postsTable.category, category)
             : undefined,
@@ -74,7 +80,6 @@ router.get("/posts", async (req, res) => {
       .orderBy(desc(postsTable.created_at))
       .limit(lim);
 
-    const posts = await query;
     res.json({ posts });
   } catch (err: any) {
     req.log.error({ err }, "getPosts error");
@@ -131,10 +136,22 @@ router.post("/posts", async (req, res) => {
 router.get("/posts/:slug", async (req, res) => {
   try {
     const { slug } = req.params;
+
+    // Admins can preview drafts by slug; public can only see published posts
+    const token =
+      req.cookies?.admin_token ||
+      (req.headers["x-admin-token"] as string);
+    const isAdmin = !!(await verifyAdminToken(token));
+
     const [post] = await db
       .select()
       .from(postsTable)
-      .where(and(eq(postsTable.slug, slug), eq(postsTable.published, true)))
+      .where(
+        and(
+          eq(postsTable.slug, slug),
+          isAdmin ? undefined : eq(postsTable.published, true)
+        )
+      )
       .limit(1);
 
     if (!post) return res.status(404).json({ error: "Not found" });
