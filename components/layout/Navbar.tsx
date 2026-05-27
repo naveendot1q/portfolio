@@ -36,10 +36,10 @@ export default function Navbar({ isAdmin, onNewPost, onAuthChange }: Props) {
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-3">
-          <Link href="https://naveenmeel.vercel.app" target="_blank"
+          <Link href="/"
             className="text-sm transition-colors hover:text-white"
             style={{ color: '#8b949e', fontFamily: 'DM Sans, sans-serif' }}>
-            Portfolio ↗
+            ← Portfolio
           </Link>
           {isAdmin ? (
             <>
@@ -75,10 +75,10 @@ export default function Navbar({ isAdmin, onNewPost, onAuthChange }: Props) {
       {menuOpen && (
         <div className="md:hidden border-t px-4 py-4 flex flex-col gap-3"
           style={{ background: '#161b22', borderColor: '#21262d' }}>
-          <Link href="https://naveenmeel.vercel.app" target="_blank"
+          <Link href="/"
             className="text-sm py-2" style={{ color: '#8b949e' }}
             onClick={() => setMenuOpen(false)}>
-            Portfolio ↗
+            ← Portfolio
           </Link>
           {isAdmin ? (
             <>

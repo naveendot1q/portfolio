@@ -1,11 +1,11 @@
 {
-  "name": "Naveen Meel — Blog",
+  "name": "Naveen Meel — Portfolio & Blog",
   "short_name": "NM.DEV",
-  "description": "Network & Cloud Engineer writing about Networking, DevOps, Kubernetes, Terraform, and Basketball.",
+  "description": "Network & Cloud Engineer — portfolio, writing, and projects.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0d1117",
-  "theme_color": "#0d1117",
+  "background_color": "#080A0F",
+  "theme_color": "#080A0F",
   "orientation": "portrait-primary",
   "categories": ["education", "technology"],
   "icons": [
@@ -20,10 +20,10 @@
   ],
   "shortcuts": [
     {
-      "name": "Latest Posts",
-      "short_name": "Posts",
+      "name": "Blog",
+      "short_name": "Blog",
       "description": "View latest blog posts",
-      "url": "/",
+      "url": "/blog",
       "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }]
     }
   ]
