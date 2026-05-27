@@ -3,6 +3,7 @@ import Navbar from '@/components/layout/Navbar';
 import PostCard from '@/components/blog/PostCard';
 import BlogSidebar from '@/components/blog/BlogSidebar';
 import EditorModal from '@/components/blog/EditorModal';
+import HeatmapChart from '@/components/blog/HeatmapChart';
 import { CATEGORIES } from '@/lib/categories';
 import type { Post } from '@/lib/types';
 
@@ -22,6 +23,7 @@ function Spinner() {
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [allPosts, setAllPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
@@ -35,6 +37,14 @@ export default function BlogPage() {
     setToast(msg);
     setTimeout(() => setToast(null), 3000);
   };
+
+  const loadAllPosts = useCallback(async () => {
+    try {
+      const res = await fetch('/api/posts?limit=500');
+      const json = await res.json();
+      setAllPosts(json.posts || []);
+    } catch {}
+  }, []);
 
   const loadPosts = useCallback(async () => {
     setLoading(true);
@@ -53,7 +63,8 @@ export default function BlogPage() {
     fetch('/api/auth/me', { credentials: 'include' })
       .then(r => r.json())
       .then(d => setIsAdmin(d.authenticated));
-  }, []);
+    loadAllPosts();
+  }, [loadAllPosts]);
 
   useEffect(() => { loadPosts(); }, [loadPosts]);
 
@@ -67,7 +78,7 @@ export default function BlogPage() {
 
   async function handleDelete(slug: string) {
     const res = await fetch(`/api/posts/${slug}`, { method: 'DELETE', credentials: 'include' });
-    if (res.ok) { showToast('Post deleted'); loadPosts(); }
+    if (res.ok) { showToast('Post deleted'); loadPosts(); loadAllPosts(); }
     else showToast('Delete failed');
   }
 
@@ -77,7 +88,7 @@ export default function BlogPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ published: !post.published }),
     });
-    if (res.ok) { showToast(post.published ? 'Post unpublished' : 'Post published'); loadPosts(); }
+    if (res.ok) { showToast(post.published ? 'Post unpublished' : 'Post published'); loadPosts(); loadAllPosts(); }
     else showToast('Failed to update');
   }
 
@@ -87,12 +98,17 @@ export default function BlogPage() {
 
       <main style={{ maxWidth: 1200, margin: '0 auto', padding: '48px 24px 80px' }}>
         {/* Header */}
-        <div style={{ marginBottom: 40 }}>
+        <div style={{ marginBottom: 32 }}>
           <p style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 10 }}>Writing</p>
           <h1 style={{ fontWeight: 800, fontSize: 'clamp(1.8rem,4vw,2.8rem)', color: 'var(--fg)', letterSpacing: '-0.03em', marginBottom: 10 }}>Blog & Articles</h1>
           <p style={{ fontSize: '0.95rem', color: 'var(--muted)', maxWidth: 480, lineHeight: 1.7 }}>
             Notes on Networking, Cloud, DevOps, Kubernetes, Terraform — and life off the court.
           </p>
+        </div>
+
+        {/* Heatmap */}
+        <div style={{ marginBottom: 32 }}>
+          <HeatmapChart posts={allPosts} allPosts={allPosts} />
         </div>
 
         {/* Search + Write */}
@@ -155,7 +171,7 @@ export default function BlogPage() {
 
           {/* Sidebar — hide on small screens */}
           <div style={{ display: 'none' }} className="sidebar-wrapper">
-            <BlogSidebar posts={posts} filter={filter} onFilterChange={setFilter} isAdmin={isAdmin} />
+            <BlogSidebar posts={allPosts} filter={filter} onFilterChange={setFilter} isAdmin={isAdmin} />
           </div>
         </div>
       </main>
@@ -167,6 +183,7 @@ export default function BlogPage() {
           onSaved={() => {
             setEditorOpen(false);
             loadPosts();
+            loadAllPosts();
             showToast(editingPost ? 'Post updated ✓' : 'Post published 🎉');
           }}
         />
