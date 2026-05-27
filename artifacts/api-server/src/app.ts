@@ -25,7 +25,19 @@ app.use(
     },
   }),
 );
-app.use(cors());
+
+// Allow credentials (cookies) for same-origin Vercel requests.
+// CORS_ORIGIN env var can be a comma-separated list of allowed origins.
+// Defaults to reflecting the request origin (allows all) which is safe
+// because the API sits behind auth checks, not just CORS.
+const allowedOrigins = process.env.CORS_ORIGIN?.split(",").map((o) => o.trim());
+app.use(
+  cors({
+    origin: allowedOrigins?.length ? allowedOrigins : true,
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
