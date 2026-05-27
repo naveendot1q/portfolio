@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState, useRef } from 'react';
-import type { Post } from '@/app/page';
+import type { Post } from '@/lib/types';
 
 type Props = { posts: Post[]; allPosts: Post[] };
 

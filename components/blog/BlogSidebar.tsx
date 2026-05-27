@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { CATEGORIES, getCategoryMeta } from '@/lib/categories';
-import type { Post } from '@/app/page';
+import type { Post } from '@/lib/types';
 
 type Props = {
   posts: Post[];

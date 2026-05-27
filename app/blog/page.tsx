@@ -8,22 +8,9 @@ import BlogSidebar from '@/components/blog/BlogSidebar';
 import EditorModal from '@/components/blog/EditorModal';
 import PwaInstallBanner from '@/components/ui/PwaInstallBanner';
 import { CATEGORIES } from '@/lib/categories';
+import type { Post } from '@/lib/types';
 
-export type Post = {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string | null;
-  content?: string;
-  category: string;
-  tags: string[] | null;
-  published: boolean;
-  cover_emoji: string | null;
-  created_at: string;
-  updated_at: string;
-  read_time: number | null;
-  word_count: number | null;
-};
+export type { Post } from '@/lib/types';
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<Post[]>([]);

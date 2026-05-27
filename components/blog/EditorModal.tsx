@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, KeyboardEvent } from 'react';
 import { CATEGORIES } from '@/lib/categories';
-import type { Post } from '@/app/page';
+import type { Post } from '@/lib/types';
 
 const EMOJIS = ['📝','🌐','☁️','⚙️','🔒','🐧','🔄','☸️','🏗️','📊','📜','🐍','⚡','🏀','✨','💡','🚀','🔥','💻','📡'];
 

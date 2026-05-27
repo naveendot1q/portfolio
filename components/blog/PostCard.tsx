@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { getCategoryMeta } from '@/lib/categories';
-import type { Post } from '@/app/page';
+import type { Post } from '@/lib/types';
 
 type Props = {
   post: Post;
