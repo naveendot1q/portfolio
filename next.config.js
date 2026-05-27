@@ -1,17 +1,35 @@
 /** @type {import('next').NextConfig} */
-const withPWA = require('next-pwa')({
-  dest: 'public',
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development',
-  fallbacks: { document: '/offline' }
-});
-
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['khjzttvwbpxfegtwkxuv.supabase.co'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'khjzttvwbpxfegtwkxuv.supabase.co',
+      },
+    ],
   },
 };
 
-module.exports = withPWA(nextConfig);
+// Only wrap with PWA if the package is available (graceful degradation)
+let config = nextConfig;
+try {
+  const withPWA = require('@ducanh2912/next-pwa').default({
+    dest: 'public',
+    cacheOnFrontEndNav: true,
+    aggressiveFrontEndNavCaching: true,
+    reloadOnOnline: true,
+    disable: process.env.NODE_ENV === 'development',
+    workboxOptions: {
+      disableDevLogs: true,
+    },
+    fallbacks: {
+      document: '/offline',
+    },
+  });
+  config = withPWA(nextConfig);
+} catch (e) {
+  console.warn('next-pwa not available, skipping PWA config');
+}
+
+module.exports = config;
